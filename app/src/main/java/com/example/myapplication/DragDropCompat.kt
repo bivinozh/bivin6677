@@ -98,11 +98,9 @@ class StringSwapDragListener : View.OnDragListener {
                         // Swap across lists (fixed counts)
                         if (targetIndex !in 0 until tgtAdapter.itemCount) return@post
                         val targetItem = tgtAdapter.getItems()[targetIndex]
-                        // Replace items in-place to keep counts fixed
-                        srcAdapter.getItems()[srcIdx] = targetItem
-                        tgtAdapter.getItems()[targetIndex] = dragged
-                        srcAdapter.notifyItemChanged(srcIdx)
-                        tgtAdapter.notifyItemChanged(targetIndex)
+                        // Replace using adapter APIs to avoid ConcurrentModificationException
+                        srcAdapter.replaceAt(srcIdx, targetItem)
+                        tgtAdapter.replaceAt(targetIndex, dragged)
                     }
                 }
                 return true
