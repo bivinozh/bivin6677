@@ -8,7 +8,6 @@ import com.example.myapplication.databinding.ItemTextBinding
 
 class StringListAdapter(
     private val items: MutableList<String>
-
 ) : RecyclerView.Adapter<StringListAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemTextBinding) : RecyclerView.ViewHolder(binding.root)
@@ -20,7 +19,6 @@ class StringListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.text1.text = items[position]
-        // start drag-and-drop using platform API on long-press
         holder.itemView.setOnLongClickListener { v ->
             v.visibility = View.INVISIBLE
             val shadow = TextDragShadowBuilder(v)
@@ -57,6 +55,12 @@ class StringListAdapter(
         if (position !in items.indices) return
         items[position] = value
         notifyItemChanged(position)
+    }
+
+    fun setAll(newItems: List<String>) {
+        items.clear()
+        items.addAll(newItems)
+        notifyDataSetChanged()
     }
 }
 

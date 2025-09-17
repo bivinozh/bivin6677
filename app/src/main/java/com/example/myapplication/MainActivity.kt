@@ -33,10 +33,22 @@ class MainActivity : AppCompatActivity() {
         left.setOnDragListener(dragListener)
         right.setOnDragListener(dragListener)
 
-        // Button to log current lists
-        findViewById<Button>(R.id.btn_log_lists).setOnClickListener {
+        // Track original (baseline) state for Cancel
+        var originalLeft = leftAdapter.getItems().toList()
+        var originalRight = rightAdapter.getItems().toList()
+
+        // Cancel: restore to original baseline
+        findViewById<Button>(R.id.btn_cancel).setOnClickListener {
+            leftAdapter.setAll(originalLeft)
+            rightAdapter.setAll(originalRight)
+        }
+
+        // Add: accept changes and log; update baseline to current
+        findViewById<Button>(R.id.btn_add).setOnClickListener {
             val (leftList, rightList) = getCurrentLists()
             Log.d("Lists", "Left: $leftList | Right: $rightList")
+            originalLeft = leftList
+            originalRight = rightList
         }
     }
 
