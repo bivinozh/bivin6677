@@ -95,12 +95,22 @@ class StringSwapDragListener : View.OnDragListener {
                         val to = targetIndex.coerceIn(0, srcAdapter.itemCount - 1)
                         if (srcIdx != to) srcAdapter.moveItem(srcIdx, to)
                     } else {
-                        // Swap across lists (fixed counts)
-                        if (targetIndex !in 0 until tgtAdapter.itemCount) return@post
-                        val targetItem = tgtAdapter.getItems()[targetIndex]
-                        // Replace using adapter APIs to avoid ConcurrentModificationException
-                        srcAdapter.replaceAt(srcIdx, targetItem)
-                        tgtAdapter.replaceAt(targetIndex, dragged)
+                        // Cross-list with fixed sizes: remove from source, insert into target at drop index,
+                        // then shift the target's first item back to the end of the source to keep counts fixed.
+                        val srcInitialSize = srcAdapter.itemCount
+                        val tgtInitialSize = tgtAdapter.itemCount
+
+                        val removed = srcAdapter.removeAt(srcIdx) ?: return@post
+                        val insertPos = targetIndex.coerceIn(0, tgtAdapter.itemCount)
+                        tgtAdapter.insertAt(insertPos, removed)
+
+                        if (tgtAdapter.itemCount > tgtInitialSize) {
+                            val shifted = tgtAdapter.removeAt(0)
+                            if (shifted != null) {
+                                // append to end of source
+                                srcAdapter.insertAt(srcAdapter.itemCount, shifted)
+                            }
+                        }
                     }
                 }
                 return true

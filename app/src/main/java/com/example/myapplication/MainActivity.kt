@@ -33,6 +33,9 @@ class MainActivity : AppCompatActivity() {
         left.setOnDragListener(dragListener)
         right.setOnDragListener(dragListener)
 
+        // Initialize master order once
+        OrderRegistry.ensureInitialized(listOf("one", "two", "three", "four", "five", "six"))
+
         // Track original (baseline) state for Cancel
         var originalLeft = leftAdapter.getItems().toList()
         var originalRight = rightAdapter.getItems().toList()
