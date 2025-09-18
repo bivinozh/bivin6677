@@ -23,8 +23,8 @@ class MainActivity : AppCompatActivity() {
         left.layoutManager = LinearLayoutManager(this)
         right.layoutManager = LinearLayoutManager(this)
 
-        leftAdapter = StringListAdapter(mutableListOf("One", "Two", "Three"))
-        rightAdapter = StringListAdapter(mutableListOf("Four", "Five", "Six"))
+        leftAdapter = StringListAdapter(mutableListOf("One", "Two", "Three", "Seven", "Eight", "Nine"))
+        rightAdapter = StringListAdapter(mutableListOf("Four", "Five", "Six", "Ten", "Eleven", "Twelve"))
         left.adapter = leftAdapter
         right.adapter = rightAdapter
 
